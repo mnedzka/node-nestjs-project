@@ -2,7 +2,7 @@ import { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import * as request from 'supertest';
 import { AppModule } from '../src/app.module';
-import { UserRegisterRequestDto, UserRegisterResponseDto } from 'src/user/dto';
+import { UserRegisterRequestDto, UserRegisterResponseDto, UserLoginRequestDto, UserLoginResponseDto } from 'src/user/dto';
 
 describe('UserController (e2e)', () => {
   let app: INestApplication;
@@ -72,5 +72,37 @@ describe('UserController (e2e)', () => {
       .then(res => {
         expect(res.body).toMatchObject(resBody);
       });
+  });
+
+  it('/user/login (POST)', () => {
+    const req: UserLoginRequestDto = {
+      password: '123',
+      email: 'piotr@myflow.pl',
+    };
+    const resBody: UserLoginResponseDto = {
+      token: expect.any(String),
+      user: {
+        id: 1,
+        name: 'piotr',
+      },
+    };
+    return request(app.getHttpServer())
+      .post('/user/login')
+      .send(req)
+      .expect(201)
+      .then(res => {
+        expect(res.body).toMatchObject(resBody);
+      });
+  });
+
+  it('/user/login ERROR', () => {
+    const req: UserLoginRequestDto = {
+      password: '123',
+      email: 'piotr@myflow.pl',
+    };
+    return request(app.getHttpServer())
+      .post('/user/login')
+      .send(req)
+      .expect(403)
   });
 });
