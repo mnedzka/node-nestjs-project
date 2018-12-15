@@ -6,16 +6,16 @@ export interface UserRegisterRequestDto {
   email: string;
 }
 
-export class UserRegisterResponseDto {
+export interface UserRegisterResponseDto {
   user: UserModel;
 }
 
 export interface UserLoginRequestDto {
-  password: string;
   email: string;
+  password: string;
 }
 
-export class UserLoginResponseDto {
+export interface UserLoginResponseDto {
   user: UserModel;
   token: string;
 }
